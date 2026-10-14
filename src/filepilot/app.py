@@ -23,12 +23,15 @@ def main(argv: list[str] | None = None) -> int:
     from .demo import create_demo
     from .journal import Journal, default_data_dir
     from .ui import MainWindow
+    from .branding import application_icon, configure_windows_identity, current_windows_identity
 
+    configure_windows_identity()
     app = QApplication.instance() or QApplication(sys.argv[:1])
     app.setApplicationName("FilePilot")
     app.setOrganizationName("FilePilot")
     app.setApplicationVersion(__version__)
     app.setStyle("Fusion")
+    app.setWindowIcon(application_icon())
     try:
         root = create_demo(Path.cwd() / "demo-files") if args.demo else args.root
         data_dir = args.data_dir or default_data_dir()
@@ -48,7 +51,10 @@ def main(argv: list[str] | None = None) -> int:
             image_saved = window.grab().save(str(screenshot))
             payload = {"ok": bool(image_saved), "filepilot": __version__, "python": sys.version.split()[0],
                        "pyside6": pyside_version, "pages": window.stack.count(), "screenshot": str(screenshot),
-                       "database_created": window.journal.path.is_file(), "frozen": bool(getattr(sys, "frozen", False))}
+                       "database_created": window.journal.path.is_file(), "frozen": bool(getattr(sys, "frozen", False)),
+                       "window_icon": not window.windowIcon().isNull(),
+                       "icon_sizes": [size.width() for size in window.windowIcon().availableSizes()],
+                       "app_user_model_id": current_windows_identity(), "window_handle": int(window.winId())}
             args.smoke_test.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
             app.exit(0 if image_saved else 1)
         QTimer.singleShot(700, report_and_exit)

@@ -32,6 +32,20 @@ python -m venv .venv
 
 如果 PowerShell 策略不允许运行 `.ps1`，直接用上述 Python 命令即可。项目不修改系统执行策略。依赖安装需要网络，软件运行和文件处理无需网络。
 
+## 桌面与任务栏图标
+
+Windows 运行包内置 FilePilot 图标，程序窗口和任务栏采用相同图标。源码入口也会设置应用图标和 Windows 应用标识。
+
+在本机完成构建后，可在项目目录执行下面的命令创建桌面快捷方式，快捷方式直接启动窗口程序：
+
+```powershell
+.\scripts\install-shortcut.ps1
+```
+
+快捷方式包含独立的 Windows 应用标识、图标位置和工作目录。启动后可右键任务栏中的 FilePilot 图标，选择“固定到任务栏”；固定操作由用户在 Windows 中完成。
+
+图标源文件为 `src/filepilot/assets/filepilot.svg`。修改 SVG 后运行 `python scripts/render_icons.py`，会重新生成 PNG 与包含 16、20、24、32、40、48、64、128、256 像素的 ICO，再重新打包即可生效。
+
 ## 使用流程
 
 1. 选择一个具体文件夹，点击 **只读扫描**。可选择是否包含子文件夹、隐藏文件。

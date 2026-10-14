@@ -29,7 +29,7 @@ try {
     if (-not (Test-Path -LiteralPath $report)) { throw 'Executable did not write its startup report.' }
     if ((Get-Item -LiteralPath $report).LastWriteTimeUtc -lt $testStart) { throw 'Startup report is stale.' }
     $payload = Get-Content -LiteralPath $report -Raw | ConvertFrom-Json
-    if (-not $payload.ok -or -not $payload.frozen -or -not $payload.database_created -or $payload.pages -ne 3) {
+    if (-not $payload.ok -or -not $payload.frozen -or -not $payload.database_created -or $payload.pages -ne 3 -or -not $payload.window_icon -or $payload.app_user_model_id -ne 'FilePilot.Desktop') {
         throw 'Executable startup checks did not pass.'
     }
     $payload | Add-Member -NotePropertyName native_windows -NotePropertyValue $true

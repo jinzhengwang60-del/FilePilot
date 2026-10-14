@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 )
 
 from . import __version__
+from .branding import application_icon
 from .journal import Journal
 from .models import MovePlan, OperationResult, ScanResult, format_bytes
 from .operations import FileOperator
@@ -30,7 +31,7 @@ QMainWindow, QWidget#Content { background: #f4f6fa; }
 QFrame#Sidebar { background: #152339; }
 QFrame#Sidebar QLabel { color: #a6b4c8; background: transparent; }
 QFrame#Sidebar QLabel#Brand { color: white; font-size: 23px; font-weight: 700; }
-QFrame#Sidebar QLabel#Mark { background: #5b83ee; color: white; border-radius: 12px; font-size: 24px; font-weight: 700; }
+QFrame#Sidebar QLabel#Mark { background: transparent; }
 QPushButton#Nav { background: transparent; color: #b8c6d9; border: none; text-align: left; padding: 14px 16px; border-radius: 9px; font-size: 14px; }
 QPushButton#Nav:checked { background: #293b57; color: white; font-weight: 600; }
 QPushButton#Nav:hover { background: #223550; }
@@ -200,6 +201,7 @@ class MainWindow(QMainWindow):
         self._closing = False
         self._history_rows: list[dict] = []
         self.setWindowTitle(f"FilePilot · 本地文件整理  {__version__}")
+        self.setWindowIcon(application_icon())
         self.resize(1280, 860)
         self.setMinimumSize(1040, 720)
         self._build_ui()
@@ -220,8 +222,9 @@ class MainWindow(QMainWindow):
         side.setContentsMargins(18, 28, 18, 24)
         side.setSpacing(12)
         brand = QHBoxLayout()
-        mark = label("F", "Mark")
+        mark = label("", "Mark")
         mark.setFixedSize(42, 42)
+        mark.setPixmap(application_icon().pixmap(42, 42))
         mark.setAlignment(Qt.AlignmentFlag.AlignCenter)
         brand.addWidget(mark)
         brand.addWidget(label("FilePilot", "Brand"))
