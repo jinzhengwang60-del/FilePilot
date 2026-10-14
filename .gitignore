@@ -1,0 +1,16 @@
+.venv/
+.build-tools/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+release/
+demo-files/
+*.sqlite3*
+*.db
+*.lock
+# Local reports include absolute paths, test fixtures and private operation history.
+artifacts/
+.env
+.env.*
