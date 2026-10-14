@@ -16,8 +16,10 @@ def create_junction(link: Path, target: Path) -> None:
     def literal(value):
         return "'" + str(value).replace("'", "''") + "'"
     script = f"New-Item -ItemType Junction -Path {literal(link)} -Target {literal(target)} -ErrorAction Stop | Out-Null"
+    # Cold .NET / PowerShell startup on a hosted runner can exceed 15 seconds.
+    # Keep a bound and let timeouts fail, rather than skipping the protection test.
     result = subprocess.run(["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", script],
-                            capture_output=True, timeout=15)
+                            capture_output=True, timeout=45)
     if result.returncode:
         pytest.skip("Execution environment cannot create Windows junction fixtures")
 
